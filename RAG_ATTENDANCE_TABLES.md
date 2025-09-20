@@ -79,7 +79,6 @@ Master table for company data.
 - company_phone - Company's official phone number.
 - time_zone - The company's primary timezone.
 - status - Status of the company (e.g., 'active').
-
 5. company_employee
 
 Master table for employee data.
@@ -191,4 +190,5 @@ Configuration table to define the weight of each component in the overall perfor
 - company_id - Links to company.
 - attendance - The weightage percentage for the attendance score.
 - task_performance - The weightage percentage for task performance.
+
 - meeting_performance - The weightage percentage for meeting performance.
