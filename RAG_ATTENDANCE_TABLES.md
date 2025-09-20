@@ -1,0 +1,194 @@
+# PostgreSQL Database Schemas for Attendance System
+
+This document outlines the table structures for the attendance, company, employee, and user management system.
+
+## 1. company_attendance_master
+
+Primary table for daily employee attendance records.
+
+- **id** - Primary key for the attendance record.
+- **company_id** - Foreign key linking to the company table.
+- **company_branch_id** - Foreign key linking to the company_branch table.
+- **company_employee_id** - Foreign key linking to the company_employee table.
+- **user_id** - Foreign key linking to the users table.
+- **local_date** - The specific date of the attendance record (DATE format).
+- **check_in_time** - Check-in timestamp stored as Unix milliseconds (BIGINT).
+- **check_out_time** - Check-out timestamp stored as Unix milliseconds (BIGINT).
+- **total_minutes** - Total working minutes for the day (DOUBLE PRECISION).
+- **total_over_time_minute** - Overtime minutes for the day (NUMERIC).
+- **is_late** - Flag indicating late arrival (SMALLINT: 1 for yes, 0 for no).
+- **is_doing_overtime** - Flag indicating overtime work (SMALLINT: 1 for yes, 0 for no).
+- **status** - Attendance status for the day (VARCHAR: e.g., 'present', 'absent', 'weekoff').
+- **is_half_day** - Flag indicating a half-day (SMALLINT: 1 for yes, 0 for no).
+- **latitude / longitude** - GPS coordinates of the attendance punch.
+- **address** - Textual address from where the attendance was marked.
+- **check_in_location_name** - Name of the location for check-in.
+- **check_out_location_name** - Name of the location for check-out.
+- **notes** - Any additional notes for the attendance record.
+- **created_at / updated_at** - Record creation and last update timestamps.
+
+## 2. company_attendance (Legacy)
+
+Legacy attendance table, may contain older records.
+
+- **id** - Primary key.
+- **company_id** - Links to company.
+- **company_branch_id** - Links to company_branch.
+- **user_id** - Links to users.
+- **company_employee_id** - Links to company_employee.
+- **check_in_time / check_out_time** - Timestamps in milliseconds (BIGINT).
+- **total_over_time_minute** - Overtime minutes.
+- **is_doing_overtime** - Overtime flag (BOOLEAN).
+- **is_late** - Late arrival flag (INTEGER).
+- **is_half_day** - Half day flag (INTEGER).
+- **status** - Attendance status.
+- **total_minutes** - Total working minutes.
+- **date** - Date of attendance.
+
+## 3. attendance_report
+
+Stores monthly summary reports for each employee.
+
+- **id** - Primary key.
+- **user_id** - Links to users.
+- **company_id** - Links to company.
+- **company_employee_id** - Links to company_employee.
+- **company_branch_id** - Links to company_branch.
+- **month** - The first day of the month for the report (DATE).
+- **month_total_day** - Total days in the report month (SMALLINT).
+- **working_day** - Total scheduled working days (SMALLINT).
+- **holiday** - Number of holidays in the month (SMALLINT).
+- **weekoff_day** - Number of week-off days (SMALLINT).
+- **leave_day** - Number of leave days taken (SMALLINT).
+- **present_day** - Number of days marked present (SMALLINT).
+- **absent_day** - Number of days marked absent (SMALLINT).
+- **late_day** - Number of days the employee was late (SMALLINT).
+- **half_day** - Number of half-days taken (SMALLINT).
+- **month_avg** - Monthly attendance percentage average (DOUBLE PRECISION).
+- **overtime_minutes** - Total overtime minutes for the month (DOUBLE PRECISION).
+- **total_minutes** - Total working minutes for the month (DOUBLE PRECISION).
+
+## 4. company
+
+Master table for company data.
+
+- **id** - Primary key.
+- **user_id** - The user ID of the company owner.
+- **name** - Company's name.
+- **company_email** - Company's official email.
+- **company_phone** - Company's official phone number.
+- **time_zone** - The company's primary timezone.
+- **status** - Status of the company (e.g., 'active').
+
+## 5. company_employee
+
+Master table for employee data.
+
+- **id** - Primary key.
+- **unique_id** - A unique identifier for the employee.
+- **company_id** - Links to company.
+- **user_id** - Links to the users table, if the employee is a system user.
+- **company_branch_id** - Links to the employee's assigned company_branch.
+- **employee_name** - Full name of the employee.
+- **employee_mobile** - Employee's mobile number.
+- **employee_email** - Employee's email address.
+- **designation** - Job title or designation.
+- **reporting_manager_id** - The id of another employee who is their manager.
+- **working_hours** - Expected daily working hours.
+- **start_time_utc / end_time_utc** - Standard work start and end times in UTC.
+- **is_overtime_allowed** - Flag to indicate if overtime is permitted.
+- **date_of_joining** - The employee's official start date.
+- **status** - Employment status (e.g., 'active', 'terminated').
+
+## 6. company_branch
+
+Stores information about different company branches or office locations.
+
+- **id** - Primary key.
+- **company_id** - Links to company.
+- **name** - The name of the branch (e.g., "Head Office").
+- **address** - Physical address of the branch.
+- **latitude / longitude** - GPS coordinates for geofencing.
+- **working_day** - Working day configuration (e.g., "Mon-Fri").
+- **start_time_utc / end_time_utc** - Standard branch opening and closing times in UTC.
+- **geofencing** - Settings related to location-based attendance.
+
+## 7. company_leave
+
+Defines the leave policy for a company or branch for a specific year.
+
+- **id** - Primary key.
+- **company_id** - Links to company.
+- **year** - The year this policy applies to.
+- **sick_leave** - Allotted number of sick leave days.
+- **casual_leave** - Allotted number of casual leave days.
+- **earned_leave** - Allotted number of earned leave days.
+- **is_carry_forward_leave_allowed** - Flag to permit carrying forward unused leaves.
+
+## 8. company_employee_leave
+
+Tracks the leave balances for each employee for a specific year.
+
+- **id** - Primary key.
+- **company_employee_id** - Links to company_employee.
+- **year** - The year this balance applies to.
+- **earned_leave** - Current earned leave balance.
+- **casual_leave** - Current casual leave balance.
+- **sick_leave** - Current sick leave balance.
+
+## 9. company_holiday
+
+Stores the list of official company holidays for a specific year.
+
+- **id** - Primary key.
+- **company_id** - Links to company.
+- **name** - Name of the holiday (e.g., "New Year's Day").
+- **date** - The date of the holiday.
+- **year** - The year of the holiday.
+
+## 10. company_over_time_approval
+
+Manages overtime approval requests from employees.
+
+- **id** - Primary key.
+- **company_employee_id** - The employee requesting overtime.
+- **updated_by** - The user ID of the manager who approved/rejected the request.
+- **date** - The date for which overtime is requested.
+- **title** - Title of the request.
+- **notes** - Justification or notes for the overtime.
+- **status** - The current status of the request (e.g., 'pending', 'approved', 'rejected').
+
+## 11. users
+
+Master table for all system users, including employees and managers.
+
+- **id** - Primary key.
+- **unique_id** - A unique identifier for the user.
+- **user_name** - The user's login name.
+- **first_name / last_name** - User's first and last names.
+- **contact_number** - User's phone number.
+- **email** - User's email address, used for login.
+- **time_zone** - The user's preferred timezone.
+- **user_status** - The status of the user account (e.g., 'active', 'suspended').
+- **is_active** - Flag indicating if the user account is active.
+
+## 12. company_report_overall_scores
+
+Stores monthly aggregated performance scores for employees.
+
+- **id** - Primary key.
+- **company_employee_id** - Links to the company_employee.
+- **month** - The month for which the score is calculated.
+- **overall_score** - The final aggregated performance score.
+- **attendance_score** - The component score derived from attendance performance.
+- **task_performance_score** - The component score from task management.
+
+## 13. company_weightages
+
+Configuration table to define the weight of each component in the overall performance score.
+
+- **id** - Primary key.
+- **company_id** - Links to company.
+- **attendance** - The weightage percentage for the attendance score.
+- **task_performance** - The weightage percentage for task performance.
+- **meeting_performance** - The weightage percentage for meeting performance.
