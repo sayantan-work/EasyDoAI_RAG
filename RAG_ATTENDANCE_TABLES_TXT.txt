@@ -173,5 +173,4 @@
 - company_id - Links to company.
 - attendance - The weightage percentage for the attendance score.
 - task_performance - The weightage percentage for task performance.
-
 - meeting_performance - The weightage percentage for meeting performance.
