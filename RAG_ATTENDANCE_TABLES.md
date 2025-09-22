@@ -88,7 +88,11 @@
 - company_phone - Company's official phone number.
 - time_zone - The company's primary timezone.
 - status - Status of the company (e.g., 'active').
+- total_minutes - Total working minutes for the month (DOUBLE PRECISION).
+[SCHEMA_END]
 
+---
+[SCHEMA_START]
 5. company_employee
 
 **Purpose:** Master table for employee data.
