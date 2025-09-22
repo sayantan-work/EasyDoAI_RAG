@@ -1,5 +1,6 @@
 ### 1. company_attendance_master
 **Purpose:** Primary table for daily employee attendance records.
+
 - id - Primary key for the attendance record.
 - company_id - Foreign key linking to the company table.
 - company_branch_id - Foreign key linking to the company_branch table.
@@ -21,9 +22,11 @@
 - notes - Any additional notes for the attendance record.
 - created_at / updated_at - Record creation and last update timestamps.
 
+***
 
 ### 2. company_attendance (Legacy)
 **Purpose:** Legacy attendance table, may contain older records.
+
 - id - Primary key.
 - company_id - Links to company.
 - company_branch_id - Links to company_branch.
@@ -38,9 +41,11 @@
 - total_minutes - Total working minutes.
 - date - Date of attendance.
 
+***
 
 ### 3. attendance_report
 **Purpose:** Stores monthly summary reports for each employee.
+
 - id - Primary key.
 - user_id - Links to users.
 - company_id - Links to company.
@@ -60,8 +65,11 @@
 - overtime_minutes - Total overtime minutes for the month (DOUBLE PRECISION).
 - total_minutes - Total working minutes for the month (DOUBLE PRECISION).
 
+***
+
 ### 4. company
 **Purpose:** Master table for company data.
+
 - id - Primary key.
 - user_id - The user ID of the company owner.
 - name - Company's name.
@@ -71,9 +79,11 @@
 - status - Status of the company (e.g., 'active').
 - total_minutes - Total working minutes for the month (DOUBLE PRECISION).
 
+***
 
-5. company_employee
+### 5. company_employee
 **Purpose:** Master table for employee data.
+
 - id - Primary key.
 - unique_id - A unique identifier for the employee.
 - company_id - Links to company.
@@ -90,9 +100,11 @@
 - date_of_joining - The employee's official start date.
 - status - Employment status (e.g., 'active', 'terminated').
 
+***
 
 ### 6. company_branch
 **Purpose:** Stores information about different company branches or office locations.
+
 - id - Primary key.
 - company_id - Links to company.
 - name - The name of the branch (e.g., "Head Office").
@@ -102,9 +114,11 @@
 - start_time_utc / end_time_utc - Standard branch opening and closing times in UTC.
 - geofencing - Settings related to location-based attendance.
 
+***
 
 ### 7. company_leave
 **Purpose:** Defines the leave policy for a company or branch for a specific year.
+
 - id - Primary key.
 - company_id - Links to company.
 - year - The year this policy applies to.
@@ -113,9 +127,11 @@
 - earned_leave - Allotted number of earned leave days.
 - is_carry_forward_leave_allowed - Flag to permit carrying forward unused leaves.
 
+***
 
 ### 8. company_employee_leave
 **Purpose:** Tracks the leave balances for each employee for a specific year.
+
 - id - Primary key.
 - company_employee_id - Links to company_employee.
 - year - The year this balance applies to.
@@ -123,18 +139,22 @@
 - casual_leave - Current casual leave balance.
 - sick_leave - Current sick leave balance.
 
+***
 
 ### 9. company_holiday
 **Purpose:** Stores the list of official company holidays for a specific year.
+
 - id - Primary key.
 - company_id - Links to company.
 - name - Name of the holiday (e.g., "New Year's Day").
 - date - The date of the holiday.
 - year - The year of the holiday.
 
+***
 
 ### 10. company_over_time_approval
 **Purpose:** Manages overtime approval requests from employees.
+
 - id - Primary key.
 - company_employee_id - The employee requesting overtime.
 - updated_by - The user ID of the manager who approved/rejected the request.
@@ -143,9 +163,11 @@
 - notes - Justification or notes for the overtime.
 - status - The current status of the request (e.g., 'pending', 'approved', 'rejected').
 
+***
 
 ### 11. users
 **Purpose:** Master table for all system users, including employees and managers.
+
 - id - Primary key.
 - unique_id - A unique identifier for the user.
 - user_name - The user's login name.
@@ -156,9 +178,11 @@
 - user_status - The status of the user account (e.g., 'active', 'suspended').
 - is_active - Flag indicating if the user account is active.
 
+***
 
 ### 12. company_report_overall_scores
 **Purpose:** Stores monthly aggregated performance scores for employees.
+
 - id - Primary key.
 - company_employee_id - Links to the company_employee.
 - month - The month for which the score is calculated.
@@ -166,9 +190,11 @@
 - attendance_score - The component score derived from attendance performance.
 - task_performance_score - The component score from task management.
 
+***
 
 ### 13. company_weightages
 **Purpose:** Configuration table to define the weight of each component in the overall performance score.
+
 - id - Primary key.
 - company_id - Links to company.
 - attendance - The weightage percentage for the attendance score.
