@@ -1,4 +1,3 @@
-[SCHEMA_START]
 ### 1. company_attendance_master
 
 **Purpose:** Primary table for daily employee attendance records.
@@ -23,11 +22,9 @@
 - check_out_location_name - Name of the location for check-out.
 - notes - Any additional notes for the attendance record.
 - created_at / updated_at - Record creation and last update timestamps.
-[SCHEMA_END]
 
 ---
 
-[SCHEMA_START]
 ### 2. company_attendance (Legacy)
 
 **Purpose:** Legacy attendance table, may contain older records.
@@ -45,11 +42,9 @@
 - status - Attendance status.
 - total_minutes - Total working minutes.
 - date - Date of attendance.
-[SCHEMA_END]
 
 ---
 
-[SCHEMA_START]
 ### 3. attendance_report
 
 **Purpose:** Stores monthly summary reports for each employee.
@@ -72,11 +67,9 @@
 - month_avg - Monthly attendance percentage average (DOUBLE PRECISION).
 - overtime_minutes - Total overtime minutes for the month (DOUBLE PRECISION).
 - total_minutes - Total working minutes for the month (DOUBLE PRECISION).
-[SCHEMA_END]
 
 ---
 
-[SCHEMA_START]
 ### 4. company
 
 **Purpose:** Master table for company data.
@@ -89,10 +82,8 @@
 - time_zone - The company's primary timezone.
 - status - Status of the company (e.g., 'active').
 - total_minutes - Total working minutes for the month (DOUBLE PRECISION).
-[SCHEMA_END]
 
 ---
-[SCHEMA_START]
 5. company_employee
 
 **Purpose:** Master table for employee data.
@@ -112,11 +103,9 @@
 - is_overtime_allowed - Flag to indicate if overtime is permitted.
 - date_of_joining - The employee's official start date.
 - status - Employment status (e.g., 'active', 'terminated').
-[SCHEMA_END]
 
 ---
 
-[SCHEMA_START]
 ### 6. company_branch
 
 **Purpose:** Stores information about different company branches or office locations.
@@ -129,11 +118,9 @@
 - working_day - Working day configuration (e.g., "Mon-Fri").
 - start_time_utc / end_time_utc - Standard branch opening and closing times in UTC.
 - geofencing - Settings related to location-based attendance.
-[SCHEMA_END]
 
 ---
 
-[SCHEMA_START]
 ### 7. company_leave
 
 **Purpose:** Defines the leave policy for a company or branch for a specific year.
@@ -145,11 +132,9 @@
 - casual_leave - Allotted number of casual leave days.
 - earned_leave - Allotted number of earned leave days.
 - is_carry_forward_leave_allowed - Flag to permit carrying forward unused leaves.
-[SCHEMA_END]
 
 ---
 
-[SCHEMA_START]
 ### 8. company_employee_leave
 
 **Purpose:** Tracks the leave balances for each employee for a specific year.
@@ -160,11 +145,9 @@
 - earned_leave - Current earned leave balance.
 - casual_leave - Current casual leave balance.
 - sick_leave - Current sick leave balance.
-[SCHEMA_END]
 
 ---
 
-[SCHEMA_START]
 ### 9. company_holiday
 
 **Purpose:** Stores the list of official company holidays for a specific year.
@@ -174,11 +157,9 @@
 - name - Name of the holiday (e.g., "New Year's Day").
 - date - The date of the holiday.
 - year - The year of the holiday.
-[SCHEMA_END]
 
 ---
 
-[SCHEMA_START]
 ### 10. company_over_time_approval
 
 **Purpose:** Manages overtime approval requests from employees.
@@ -190,11 +171,9 @@
 - title - Title of the request.
 - notes - Justification or notes for the overtime.
 - status - The current status of the request (e.g., 'pending', 'approved', 'rejected').
-[SCHEMA_END]
 
 ---
 
-[SCHEMA_START]
 ### 11. users
 
 **Purpose:** Master table for all system users, including employees and managers.
@@ -208,11 +187,9 @@
 - time_zone - The user's preferred timezone.
 - user_status - The status of the user account (e.g., 'active', 'suspended').
 - is_active - Flag indicating if the user account is active.
-[SCHEMA_END]
 
 ---
 
-[SCHEMA_START]
 ### 12. company_report_overall_scores
 
 **Purpose:** Stores monthly aggregated performance scores for employees.
@@ -223,11 +200,9 @@
 - overall_score - The final aggregated performance score.
 - attendance_score - The component score derived from attendance performance.
 - task_performance_score - The component score from task management.
-[SCHEMA_END]
 
 ---
 
-[SCHEMA_START]
 ### 13. company_weightages
 
 **Purpose:** Configuration table to define the weight of each component in the overall performance score.
