@@ -88,12 +88,8 @@
 - company_phone - Company's official phone number.
 - time_zone - The company's primary timezone.
 - status - Status of the company (e.g., 'active').
-[SCHEMA_END]
 
----
-
-[SCHEMA_START]
-### 5. company_employee
+5. company_employee
 
 **Purpose:** Master table for employee data.
 
@@ -236,7 +232,5 @@
 - company_id - Links to company.
 - attendance - The weightage percentage for the attendance score.
 - task_performance - The weightage percentage for task performance.
-- meeting_performance - The weightage percentage for meeting performance.
-[SCHEMA_END]
 
----
+- meeting_performance - The weightage percentage for meeting performance.
