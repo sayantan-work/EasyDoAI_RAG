@@ -1,0 +1,210 @@
+## Database Schema Documentation
+
+This document outlines the structure of the main tables in the Company Attendance Management System.
+
+### **Table of Contents**
+1.  `company_attendance_master`
+2.  `attendance_report`
+3.  `company`
+4.  `company_employee`
+5.  `company_branch`
+6.  `company_leave`
+7.  `company_employee_leave`
+8.  `company_holiday`
+9.  `users`
+10. `company_report_overall_scores`
+11. `company_weightages`
+12. `company_attendance` (Legacy)
+
+---
+### 1. `company_attendance_master`
+**Purpose:** Stores detailed daily check-in/check-out records and attendance status for each employee.
+
+| Column | Data Type (Inferred) | Description |
+| :--- | :--- | :--- |
+| `id` | `BIGINT` | Unique identifier for the attendance record. |
+| `company_id` | `BIGINT` | Foreign Key to the `company` table. |
+| `company_branch_id` | `BIGINT` | Foreign Key to the `company_branch` table. |
+| `company_employee_id` | `BIGINT` | Foreign Key to the `company_employee` table. |
+| `user_id` | `BIGINT` | Foreign Key to the `users` table. |
+| `local_date` | `DATE` | The specific date of the attendance record. |
+| `check_in_time` | `TIME` / `TIMESTAMP` | The time the employee punched in. |
+| `check_out_time` | `TIME` / `TIMESTAMP` | The time the employee punched out. |
+| `total_minutes`| `INTEGER` | Total minutes worked for the day. |
+| `total_over_time_minute` | `DECIMAL` | Total overtime minutes for the day. |
+| `is_late` | `BOOLEAN` | Flag indicating if the employee was late. |
+| `is_doing_overtime` | `BOOLEAN` | Flag indicating if the employee worked overtime. |
+| `is_half_day`| `BOOLEAN` | Flag indicating if the attendance was for a half-day. |
+| `status` | `TEXT` | The status for the day (e.g., 'present', 'weekoff', 'leave'). |
+| `latitude`, `longitude` | `TEXT` / `NUMERIC` | GPS coordinates for the check-in location. |
+| `address` | `TEXT` | Address of the check-in location. |
+| `created_at`, `updated_at` | `TIMESTAMP` | Timestamps for record creation and last update. |
+
+---
+### 2. `attendance_report`
+**Purpose:** Stores monthly aggregated attendance summaries for each employee.
+
+| Column | Data Type (Inferred) | Description |
+| :--- | :--- | :--- |
+| `id` | `BIGINT` | Unique identifier for the report. |
+| `company_employee_id` | `BIGINT` | Foreign Key to the `company_employee` table. |
+| `user_id` | `BIGINT` | Foreign Key to the `users` table. |
+| `company_id` | `BIGINT` | Foreign Key to the `company` table. |
+| `month` | `DATE` | The first day of the month for which the report is generated. |
+| `working_day`| `INTEGER` | Total number of working days in the month. |
+| `present_day`| `INTEGER` | Total days the employee was present. |
+| `absent_day` | `INTEGER` | Total days the employee was absent. |
+| `leave_day` | `INTEGER` | Total days the employee was on leave. |
+| `late_day` | `INTEGER` | Total number of times the employee was late. |
+| `overtime_minutes`| `INTEGER` | Total overtime minutes for the month. |
+| `total_minutes`| `DECIMAL` | Total minutes worked for the month. |
+| `month_avg` | `INTEGER` / `DECIMAL`| The employee's average performance or attendance score for the month. |
+
+---
+### 3. `company`
+**Purpose:** Master table for storing core information about each company.
+
+| Column | Data Type (Inferred) | Description |
+| :--- | :--- | :--- |
+| `id` | `BIGINT` | Unique identifier for the company. |
+| `user_id` | `BIGINT` | Foreign Key to the `users` table, likely the company owner. |
+| `name` | `TEXT` | The legal name of the company. |
+| `company_email`| `TEXT` | The official contact email for the company. |
+| `company_phone`| `TEXT` | The official contact phone number for the company. |
+| `industry_type`| `TEXT` | The industry the company operates in. |
+| `pan_card_no`| `TEXT` | The company's PAN number. |
+| `registered_address` | `TEXT` | The official registered address of the company. |
+| `expiry_date`| `DATE` | The subscription expiry date for the company. |
+| `subscription_package_id`| `INTEGER` | Foreign Key to a subscriptions package table. |
+
+---
+### 4. `company_employee`
+**Purpose:** Master table for storing detailed information about each employee.
+
+| Column | Data Type (Inferred) | Description |
+| :--- | :--- | :--- |
+| `id` | `BIGINT` | Unique identifier for the employee. |
+| `unique_id` | `TEXT` | A unique system-generated ID for the employee. |
+| `user_id` | `BIGINT` | Foreign Key to the `users` table. |
+| `company_id` | `BIGINT` | Foreign Key to the `company` table. |
+| `company_branch_id` | `BIGINT` | Foreign Key to the `company_branch` table. |
+| `employee_name`| `TEXT` | The full name of the employee. |
+| `employee_email`| `TEXT` | The employee's contact email. |
+| `designation` | `TEXT` | The employee's job title. |
+| `basic_salary` | `INTEGER` / `DECIMAL`| The employee's base salary. |
+| `date_of_joining`| `DATE` | The date the employee joined the company. |
+| `reporting_manager_id` | `BIGINT` | Self-referencing FK to another employee (their manager). |
+| `status` | `INTEGER` / `BOOLEAN`| The current employment status (e.g., active, terminated). |
+| `is_deleted` | `TEXT` | Flag indicating if the employee record is deleted. |
+
+---
+### 5. `company_branch`
+**Purpose:** Stores information about each physical branch or office location of a company.
+
+| Column | Data Type (Inferred) | Description |
+| :--- | :--- | :--- |
+| `id` | `BIGINT` | Unique identifier for the branch. |
+| `company_id` | `BIGINT` | Foreign Key to the `company` table. |
+| `name` | `TEXT` | The name of the branch (e.g., "Head Office", "Kolkata Site"). |
+| `address` | `TEXT` | The full address of the branch. |
+| `branch_type`| `TEXT` | Type of branch (e.g., 'head', 'sub'). |
+| `working_day`| `TEXT` | A list of working days (e.g., 'mon,tue,wed,thu,fri'). |
+| `working_hours`| `INTEGER` | The standard number of working hours per day. |
+| `start_time`, `end_time` | `TEXT` / `TIME` | The official start and end times for the branch. |
+
+---
+### 6. `company_leave`
+**Purpose:** Defines the company-wide leave policy for a given year.
+
+| Column | Data Type (Inferred) | Description |
+| :--- | :--- | :--- |
+| `id` | `BIGINT` | Unique identifier for the leave policy record. |
+| `company_id` | `BIGINT` | Foreign Key to the `company` table. |
+| `year` | `TEXT` / `INTEGER` | The year for which this policy applies. |
+| `sick_leave` | `INTEGER` | Total number of sick leaves allocated per year. |
+| `casual_leave` | `INTEGER` | Total number of casual leaves allocated per year. |
+| `earned_leave` | `INTEGER` | Total number of earned leaves allocated per year. |
+| `is_carry_forward_leave_allowed` | `BOOLEAN` | Flag indicating if unused leaves can be carried forward. |
+
+---
+### 7. `company_employee_leave`
+**Purpose:** Tracks the specific leave balances for an individual employee for a given year.
+
+| Column | Data Type (Inferred) | Description |
+| :--- | :--- | :--- |
+| `id` | `BIGINT` | Unique identifier for the employee leave record. |
+| `company_employee_id` | `BIGINT` | Foreign Key to the `company_employee` table. |
+| `company_id` | `BIGINT` | Foreign Key to the `company` table. |
+| `year` | `TEXT` / `INTEGER` | The year for which this balance applies. |
+| `earned_leave` | `INTEGER` | The employee's current earned leave balance. |
+| `casual_leave` | `INTEGER` | The employee's current casual leave balance. |
+| `sick_leave` | `INTEGER` | The employee's current sick leave balance. |
+
+---
+### 8. `company_holiday`
+**Purpose:** Stores the list of official holidays for a company in a specific year.
+
+| Column | Data Type (Inferred) | Description |
+| :--- | :--- | :--- |
+| `id` | `BIGINT` | Unique identifier for the holiday. |
+| `company_id` | `BIGINT` | Foreign Key to the `company` table. |
+| `name` | `TEXT` | The name of the holiday (e.g., "New Year"). |
+| `date` | `DATE` | The specific date of the holiday. |
+| `year` | `INTEGER` | The year of the holiday. |
+
+---
+### 9. `users`
+**Purpose:** Master table for all system users, containing login, personal, and technical details.
+
+| Column | Data Type (Inferred) | Description |
+| :--- | :--- | :--- |
+| `id` | `BIGINT` | Unique identifier for the user. |
+| `unique_id` | `TEXT` | A unique system-generated ID for the user. |
+| `user_role_id`| `INTEGER` | Foreign Key to a `user_roles` table. |
+| `user_name` | `TEXT` | The user's full name. |
+| `contact_number`| `TEXT` | The user's phone number. |
+| `email` | `TEXT` | The user's unique email address, used for login. |
+| `is_email_verified`| `TEXT` | Flag indicating if the email has been verified ('Y'/'N'). |
+| `is_active` | `TEXT` | Flag indicating if the user account is active ('Y'/'N'). |
+| `device_type` | `TEXT` | The last used device type (e.g., 'android'). |
+| `app_version` | `TEXT` | The last used application version. |
+
+---
+### 10. `company_report_overall_scores`
+**Purpose:** Stores monthly aggregated performance scores for employees.
+
+| Column | Data Type (Inferred) | Description |
+| :--- | :--- | :--- |
+| `id` | `BIGINT` | Unique identifier for the score record. |
+| `company_employee_id` | `BIGINT` | Foreign Key to the `company_employee` table. |
+| `month` | `DATE` | The month for which the scores are calculated. |
+| `overall_score`| `DECIMAL` | The final aggregated score. |
+| `attendance_score`| `INTEGER` | The score component based on attendance. |
+| `task_performance_score`| `INTEGER` | The score component based on task performance. |
+
+---
+### 11. `company_weightages`
+**Purpose:** Defines the weight of each component in the overall performance score calculation for a company.
+
+| Column | Data Type (Inferred) | Description |
+| :--- | :--- | :--- |
+| `id` | `BIGINT` | Unique identifier for the weightage record. |
+| `company_id` | `BIGINT` | Foreign Key to the `company` table. |
+| `attendance` | `INTEGER` | The percentage weight for attendance (e.g., 20 for 20%). |
+| `task_performance`| `INTEGER` | The percentage weight for task performance. |
+| `management_review`| `INTEGER` | The percentage weight for management review. |
+
+---
+### 12. `company_attendance` (Legacy)
+**Purpose:** Appears to be an older or different version of the attendance table, possibly with denormalized or raw data.
+
+| Column | Data Type (Inferred) | Description |
+| :--- | :--- | :--- |
+| `id` | `BIGINT` | Unique identifier for the attendance record. |
+| `company_employee_id` | `BIGINT` | Foreign Key to the `company_employee` table. |
+| `check_in_time`| `BIGINT` | The check-in time, likely as a Unix timestamp. |
+| `check_out_time`| `BIGINT` | The check-out time, likely as a Unix timestamp. |
+| `date` | `DATE` | The specific date of the attendance. |
+| `notes` | `TEXT` | Any notes associated with the attendance record. |
+| `location_object`| `JSONB` | A JSON object containing detailed location and branch information. |
+| `media_object`| `JSONB` | A JSON object containing media or other complex attendance data. |

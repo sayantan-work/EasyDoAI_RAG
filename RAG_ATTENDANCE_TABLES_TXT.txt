@@ -1,53 +1,77 @@
 ## Company Attendance Management System Database Schema
-
 ### company_attendance_master
 - **Purpose:** Daily employee attendance records.
 - **Fields:** `id`, `company_id`, `company_branch_id`, `company_employee_id`, `user_id`, `local_date`, `check_in_time`, `check_out_time`, `total_minutes`, `total_over_time_minute`, `is_late`, `is_doing_overtime`, `status`, `is_half_day`, `latitude`, `longitude`, `address`, `check_in_location_name`, `check_out_location_name`, `notes`, `created_at`, `updated_at`.
 ---
+
+
 ### company_attendance (Legacy)
 - **Purpose:** Legacy attendance table with older records.
 - **Fields:** `id`, `company_id`, `company_branch_id`, `user_id`, `company_employee_id`, `check_in_time`, `check_out_time`, `total_over_time_minute`, `is_doing_overtime`, `is_late`, `is_half_day`, `status`, `total_minutes`, `date`.
 ---
+
+
 ### attendance_report
 - **Purpose:** Monthly summary reports for each employee.
 - **Fields:** `id`, `user_id`, `company_id`, `company_employee_id`, `company_branch_id`, `month`, `month_total_day`, `working_day`, `holiday`, `weekoff_day`, `leave_day`, `present_day`, `absent_day`, `late_day`, `half_day`, `month_avg`, `overtime_minutes`, `total_minutes`.
 ---
+
+
 ### company
 - **Purpose:** Master table for company data.
 - **Fields:** `id`, `user_id`, `name`, `company_email`, `company_phone`, `time_zone`, `status`, `total_minutes`.
 ---
+
+
 ### company_employee
 - **Purpose:** Master table for employee data.
 - **Fields:** `id`, `unique_id`, `company_id`, `user_id`, `company_branch_id`, `employee_name`, `employee_mobile`, `employee_email`, `designation`, `reporting_manager_id`, `working_hours`, `start_time_utc`, `end_time_utc`, `is_overtime_allowed`, `date_of_joining`, `status`.
 ---
+
+
 ### company_branch
 - **Purpose:** Information about company branches or office locations.
 - **Fields:** `id`, `company_id`, `name`, `address`, `latitude`, `longitude`, `working_day`, `start_time_utc`, `end_time_utc`, `geofencing`.
 ---
+
+
 ### company_leave
 - **Purpose:** Defines the leave policy for a company or branch.
 - **Fields:** `id`, `company_id`, `year`, `sick_leave`, `casual_leave`, `earned_leave`, `is_carry_forward_leave_allowed`.
 ---
+
+
 ### company_employee_leave
 - **Purpose:** Tracks leave balances for each employee.
 - **Fields:** `id`, `company_employee_id`, `year`, `earned_leave`, `casual_leave`, `sick_leave`.
 ---
+
+
 ### company_holiday
 - **Purpose:** Stores official company holidays.
 - **Fields:** `id`, `company_id`, `name`, `date`, `year`.
 ---
+
+
 ### company_over_time_approval
 - **Purpose:** Manages overtime approval requests.
 - **Fields:** `id`, `company_employee_id`, `updated_by`, `date`, `title`, `notes`, `status`.
 ---
+
+
 ### users
 - **Purpose:** Master table for all system users.
 - **Fields:** `id`, `unique_id`, `user_name`, `first_name`, `last_name`, `contact_number`, `email`, `time_zone`, `user_status`, `is_active`.
 ---
+
+
 ### company_report_overall_scores
 - **Purpose:** Stores monthly aggregated performance scores for employees.
 - **Fields:** `id`, `company_employee_id`, `month`, `overall_score`, `attendance_score`, `task_performance_score`.
 ---
+
+
 ### company_weightages
 - **Purpose:** Defines the weight of each component in the overall performance score.
 - **Fields:** `id`, `company_id`, `attendance`, `task_performance`, `meeting_performance`.
+---
